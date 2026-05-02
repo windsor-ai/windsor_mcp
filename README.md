@@ -10,7 +10,7 @@ It works with Claude, ChatGPT, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, 
 > **TL;DR**
 > - Native connector in **Claude** (in the Claude directory) and **ChatGPT** (as a ChatGPT app).
 > - **OAuth 2.0** — sign in once at Windsor.ai, no API keys to manage.
-> - **Free during beta**; some LLM providers (e.g. Claude) require a paid plan to use connectors.
+> - **Free forever plan available** at Windsor.ai; some LLM providers (e.g. Claude) require a paid plan to use connectors.
 > - Live, machine-readable docs for AI agents at [`/llms.txt`](https://mcp.windsor.ai/llms.txt), [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt), and [`/datasources`](https://mcp.windsor.ai/datasources).
 
 ---
@@ -220,7 +220,7 @@ npm install -g @google/gemini-cli
 ## ❓ FAQs
 
 ### Is Windsor MCP free to use?
-Yes, it's free during our beta phase. You'll need a Windsor.ai account with integrated data. Some LLM providers (e.g. Claude) require a paid plan to use connectors.
+Yes — Windsor.ai has a free forever plan, and the MCP server is included at no extra cost. You'll need a Windsor.ai account with integrated data. Some LLM providers (e.g. Claude) require a paid plan to use connectors. See [windsor.ai/pricing](https://windsor.ai/pricing/) for details.
 
 ### What AI agents does Windsor MCP work with?
 Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), ChatGPT, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, mcp-proxy, and custom MCP clients. See the [Supported AI clients](#-supported-ai-clients) table above.
@@ -244,7 +244,7 @@ Yes. All Windsor MCP tools are read-only — they fetch data, they cannot write 
 Windsor MCP is a native MCP server, not a plugin or wrapper — it works in any MCP-compatible client without proxies. Windsor.ai includes warehouse and database destinations (BigQuery, Snowflake, Redshift, S3, MySQL, Postgres) on its lower-priced tiers, and the MCP server is included on all paid plans at no extra cost. See [windsor.ai/pricing](https://windsor.ai/pricing) for a feature-by-feature comparison.
 
 ### How much does Windsor.ai cost?
-The MCP server is free during beta. Windsor.ai data plans start at $19/month (annual) for 3 sources. See [windsor.ai/pricing](https://windsor.ai/pricing) for the current pricing.
+Windsor.ai has a free forever plan. Paid plans add more sources, higher limits, and additional destinations. The MCP server is included on every plan at no extra cost. See [windsor.ai/pricing](https://windsor.ai/pricing/) for the current pricing.
 
 ### Does Windsor MCP work on mobile?
 The hosted server is platform-agnostic, but mobile support depends on which AI client you use. Claude Web/Desktop, ChatGPT Web/Desktop and Cursor Desktop are fully supported today; mobile MCP support varies by client and is rolling out.
