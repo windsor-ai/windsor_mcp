@@ -5,7 +5,7 @@
 
 Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 325+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations.
 
-It works with Claude, ChatGPT, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, and any MCP-compatible client.
+It works with Claude, ChatGPT, Microsoft Copilot, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, and any MCP-compatible client.
 
 > **TL;DR**
 > - Native connector in **Claude** (in the Claude directory) and **ChatGPT** (as a ChatGPT app).
@@ -35,7 +35,7 @@ Sync data from Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, GA4, HubSpot, Sal
 Windsor MCP is available as a native connector in Claude and ChatGPT — just enable it and sign in. No proxies, no scripts, no custom integrations.
 
 ### Open standard compatibility
-Built on the open MCP spec, it's compatible with Claude, ChatGPT, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, and any MCP-compatible client.
+Built on the open MCP spec, it's compatible with Claude, ChatGPT, Microsoft Copilot, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, and any MCP-compatible client.
 
 ### Real-time analytics without SQL
 Get instant breakdowns, summaries and performance insights from your integrated data — no dashboards to build, no queries to write.
@@ -87,9 +87,11 @@ For full parameter signatures, see [`/llms-full.txt`](https://mcp.windsor.ai/llm
 |---|---|---|---|
 | **Claude** (Desktop, Web, Code) | [One-click install](https://claude.ai/directory/360c0c31-4bb6-42ca-8e50-5da0a100a68e) — listed in the Claude directory | OAuth 2.0 | ~30 seconds |
 | **ChatGPT** | [One-click install](https://chatgpt.com/apps/windsor-ai/asdk_app_694a52cfaa3c819192bea84eaa254968) — listed as a ChatGPT app | OAuth 2.0 | ~30 seconds |
+| **Microsoft Copilot** | [Windsor.ai Power Platform connector](https://learn.microsoft.com/en-us/connectors/windsorai/) — see [integration guide](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-copilot-agent/) | API key | ~5 minutes |
 | **Claude Code** | `claude plugin install windsor-ai` — [source](https://github.com/windsor-ai/claude-windsor-ai-plugin), with slash commands and an analyst agent | OAuth 2.0 | ~1 minute |
 | **Cursor** | [windsor-ai/windsor-ai-cursor-plugin](https://github.com/windsor-ai/windsor-ai-cursor-plugin), or paste the config below | OAuth 2.0 | ~1 minute |
-| **Windsurf, Cline, GitHub Copilot, Manus, n8n** | Standard MCP server config (`url: https://mcp.windsor.ai/`) | OAuth 2.0 | ~1 minute |
+| **Manus** | Add `https://mcp.windsor.ai/` as an MCP server — see [integration guide](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-manus-ai/) | OAuth 2.0 | ~1 minute |
+| **Windsurf, Cline, GitHub Copilot, n8n** | Standard MCP server config (`url: https://mcp.windsor.ai/`) | OAuth 2.0 | ~1 minute |
 | **Gemini CLI** | Edit `~/.gemini/settings.json` (config below) | OAuth 2.0 | ~2 minutes |
 
 Any MCP-compatible client works. If your client only supports API keys, pass your Windsor.ai key as `Authorization: Bearer <key>`.
@@ -169,7 +171,26 @@ Windsor.ai is available as a ChatGPT app.
 
 ---
 
-## Option 3: Cursor
+## Option 3: Microsoft Copilot (Power Platform connector)
+
+Use Windsor.ai inside Microsoft Copilot Studio agents and Power Platform flows via the official Windsor.ai Power Platform connector.
+
+👉 **Connector reference: [learn.microsoft.com/connectors/windsorai](https://learn.microsoft.com/en-us/connectors/windsorai/)**
+<br/>
+👉 **Integration guide: [windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-copilot-agent](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-copilot-agent/)**
+
+### Prerequisites
+- A Microsoft Copilot Studio or Power Platform license
+- A Windsor.ai account and API key (from [onboard.windsor.ai](https://onboard.windsor.ai))
+
+### Steps
+1. In Copilot Studio, add a new action and search for **Windsor.ai** in the connector catalog.
+2. Provide your Windsor.ai API key when prompted.
+3. Map the connector actions (list connectors, get fields, get data) into your agent's flow. Full walkthrough in the [integration guide](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-copilot-agent/).
+
+---
+
+## Option 4: Cursor
 
 We publish a dedicated Cursor plugin: [github.com/windsor-ai/windsor-ai-cursor-plugin](https://github.com/windsor-ai/windsor-ai-cursor-plugin).
 
@@ -194,7 +215,18 @@ We publish a dedicated Cursor plugin: [github.com/windsor-ai/windsor-ai-cursor-p
 
 ---
 
-## Option 4: Gemini CLI
+## Option 5: Manus
+
+Manus supports remote MCP servers natively — full walkthrough in the [Windsor.ai integration guide for Manus](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-manus-ai/).
+
+### Steps
+1. In Manus, open **Settings → MCP Servers → Add server**.
+2. Use the URL `https://mcp.windsor.ai/` and authorize via OAuth.
+3. Start a new session and ask about your connected data sources.
+
+---
+
+## Option 6: Gemini CLI
 
 ### Steps
 1. Install the Gemini CLI:
@@ -223,7 +255,7 @@ npm install -g @google/gemini-cli
 Yes — Windsor.ai has a free forever plan, and the MCP server is included at no extra cost. You'll need a Windsor.ai account with integrated data. Some LLM providers (e.g. Claude) require a paid plan to use connectors. See [windsor.ai/pricing](https://windsor.ai/pricing/) for details.
 
 ### What AI agents does Windsor MCP work with?
-Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), ChatGPT, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, mcp-proxy, and custom MCP clients. See the [Supported AI clients](#-supported-ai-clients) table above.
+Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), ChatGPT, Microsoft Copilot (via the Power Platform connector), Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, mcp-proxy, and custom MCP clients. See the [Supported AI clients](#-supported-ai-clients) table above.
 
 ### What can I ask Windsor MCP?
 Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it.
@@ -261,6 +293,8 @@ Start querying your business data via Windsor MCP — fastest path is the Claude
 
 Other entry points:
 - 👉 [Install on ChatGPT](https://chatgpt.com/apps/windsor-ai/asdk_app_694a52cfaa3c819192bea84eaa254968)
+- 👉 [Microsoft Copilot connector](https://learn.microsoft.com/en-us/connectors/windsorai/) ([integration guide](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-copilot-agent/))
+- 👉 [Manus integration guide](https://windsor.ai/documentation/windsor-mcp/how-to-integrate-data-into-manus-ai/)
 - 👉 [Claude Code plugin](https://github.com/windsor-ai/claude-windsor-ai-plugin)
 - 👉 [Cursor plugin](https://github.com/windsor-ai/windsor-ai-cursor-plugin)
 - 👉 [Get a Windsor.ai API key](https://onboard.windsor.ai)
