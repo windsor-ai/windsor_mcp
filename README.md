@@ -87,7 +87,7 @@ For full parameter signatures, see [`/llms-full.txt`](https://mcp.windsor.ai/llm
 |---|---|---|---|
 | **Claude** (Desktop, Web, Code) | [One-click install](https://claude.ai/directory/360c0c31-4bb6-42ca-8e50-5da0a100a68e) — listed in the Claude directory | OAuth 2.0 | ~30 seconds |
 | **ChatGPT** | [One-click install](https://chatgpt.com/apps/windsor-ai/asdk_app_694a52cfaa3c819192bea84eaa254968) — listed as a ChatGPT app | OAuth 2.0 | ~30 seconds |
-| **Claude Code** | [windsor-ai/claude-windsor-ai-plugin](https://github.com/windsor-ai/claude-windsor-ai-plugin) — slash commands and an analyst agent | OAuth 2.0 | ~1 minute |
+| **Claude Code** | `claude plugin install windsor-ai` — [source](https://github.com/windsor-ai/claude-windsor-ai-plugin), with slash commands and an analyst agent | OAuth 2.0 | ~1 minute |
 | **Cursor** | [windsor-ai/windsor-ai-cursor-plugin](https://github.com/windsor-ai/windsor-ai-cursor-plugin), or paste the config below | OAuth 2.0 | ~1 minute |
 | **Windsurf, Cline, GitHub Copilot, Manus, n8n** | Standard MCP server config (`url: https://mcp.windsor.ai/`) | OAuth 2.0 | ~1 minute |
 | **Gemini CLI** | Edit `~/.gemini/settings.json` (config below) | OAuth 2.0 | ~2 minutes |
@@ -144,7 +144,11 @@ Windsor.ai is listed in the Claude directory.
    What were my top 5 Meta Ads campaigns by ROAS last month?
    </pre>
 
-For Claude Code users, we also publish a dedicated plugin with slash commands and an analyst agent: [github.com/windsor-ai/claude-windsor-ai-plugin](https://github.com/windsor-ai/claude-windsor-ai-plugin).
+For Claude Code users, install our dedicated plugin with slash commands and an analyst agent:
+<pre>
+claude plugin install windsor-ai
+</pre>
+Source: [github.com/windsor-ai/claude-windsor-ai-plugin](https://github.com/windsor-ai/claude-windsor-ai-plugin).
 
 ---
 
