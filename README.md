@@ -254,9 +254,6 @@ For support or feedback, contact [support@windsor.ai](mailto:support@windsor.ai)
 
 ---
 
-## 🧪 Beta Status
-Windsor MCP is currently in beta. All features are fully functional, but you may encounter occasional quirks. We're actively improving performance, authentication, compatibility and feature coverage.
-
 ## 🧠 Try it now
 Start querying your business data via Windsor MCP — fastest path is the Claude one-click install:
 
