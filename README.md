@@ -1,15 +1,15 @@
-# Windsor MCP — Connect Claude, ChatGPT and Cursor to 325+ marketing data sources
+# Windsor MCP — Connect Claude, ChatGPT and Cursor to 350+ marketing data sources
 
 <!-- Canonical: https://mcp.windsor.ai/docs -->
 <!-- Last updated: May 2026 -->
 
-Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 325+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On connectors that support it, agents can also execute **write actions** — for example pausing or enabling ad campaigns and adjusting budgets on Meta Ads, Google Ads and TikTok Ads.
+Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 350+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On connectors that support it, agents can also execute **write actions** — for example pausing or enabling ad campaigns and adjusting budgets on Meta Ads, Google Ads and TikTok Ads.
 
 It works with Claude, ChatGPT, Microsoft Copilot, Perplexity, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, and any MCP-compatible client.
 
 > **TL;DR**
 > - Native connector in **Claude** (in the Claude directory) and **ChatGPT** (as a ChatGPT app).
-> - **Read and write**: query data from 325+ sources, and execute write actions (e.g. pause/enable ad campaigns) on connectors that expose them.
+> - **Read and write**: query data from 350+ sources, and execute write actions (e.g. pause/enable ad campaigns) on connectors that expose them.
 > - **OAuth 2.0** — sign in once at Windsor.ai, no API keys to manage.
 > - **Free forever plan available** at Windsor.ai; some LLM providers (e.g. Claude) require a paid plan to use connectors.
 > - Live, machine-readable docs for AI agents at [`/llms.txt`](https://mcp.windsor.ai/llms.txt), [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt), and [`/datasources`](https://mcp.windsor.ai/datasources).
@@ -37,7 +37,7 @@ Ask your assistant to act on the insights it surfaces — for connectors that ex
 
 Write actions modify external state, so MCP clients should always confirm intent with the user before invoking them.
 
-### Out-of-the-box integration with 325+ sources
+### Out-of-the-box integration with 350+ sources
 Sync data from Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake, QuickBooks, Xero, and 300+ more via native Windsor.ai connectors. Full live list at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources).
 
 ### Zero-code setup
@@ -115,7 +115,7 @@ Any MCP-compatible client works. If your client only supports API keys, pass you
 
 ## 📦 Supported data sources
 
-325+ connectors across advertising, analytics, organic social, CRM, marketing automation, e-commerce, payments, affiliate, app analytics, helpdesk, productivity, databases and warehouses. **Live, complete list:** [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources).
+350+ connectors across advertising, analytics, organic social, CRM, marketing automation, e-commerce, payments, affiliate, app analytics, helpdesk, productivity, databases and warehouses. **Live, complete list:** [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources).
 
 Highlights by category:
 
@@ -277,7 +277,7 @@ Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), Chat
 Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it. On connectors that expose write actions (e.g. Meta Ads, Google Ads, TikTok Ads), you can also ask the assistant to act on what it finds — for example, "pause the campaigns that burned budget last week" or "cut this campaign's daily budget by 20%".
 
 ### What data sources does Windsor MCP support?
-325+ connectors across advertising, analytics, CRM, e-commerce, payments, warehouses and more. The live, complete list is at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources). See the [Supported data sources](#-supported-data-sources) section for highlights by category.
+350+ connectors across advertising, analytics, CRM, e-commerce, payments, warehouses and more. The live, complete list is at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources). See the [Supported data sources](#-supported-data-sources) section for highlights by category.
 
 ### Do I need to write SQL or set up dashboards?
 No. Just ask your questions in plain English and get structured responses in real-time.
