@@ -1,9 +1,9 @@
 # Windsor MCP — Connect Claude, ChatGPT and Cursor to 350+ marketing data sources
 
 <!-- Canonical: https://mcp.windsor.ai/docs -->
-<!-- Last updated: May 2026 -->
+<!-- Last updated: August 2026 -->
 
-Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 350+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On connectors that support it, agents can also execute **write actions** — for example pausing or enabling ad campaigns and adjusting budgets on Meta Ads, Google Ads and TikTok Ads.
+Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 350+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On connectors that support it, agents can also execute **write actions** — for example creating and managing campaigns and budgets on Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, and Microsoft Ads (Bing); publishing Instagram posts; managing Google Business Profile listings and reviews; updating Klaviyo flows and Salesforce records; and more.
 
 It works with Claude, ChatGPT, Microsoft Copilot, Perplexity, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, and any MCP-compatible client.
 
@@ -30,10 +30,17 @@ Ask questions like:
 All in real-time, directly inside your LLM chat interface.
 
 ### Write actions, not just reads
-Ask your assistant to act on the insights it surfaces — for connectors that expose write actions (e.g. Meta Ads, Google Ads, TikTok Ads):
+Ask your assistant to act on the insights it surfaces — for connectors that expose write actions:
 - "Pause my underperforming Meta Ads campaigns from last week."
 - "Re-enable the Google Ads campaign 'Summer Sale 2026'."
 - "Cut the daily budget on this TikTok Ads campaign by 20%."
+- "Push these as negative keywords on that Google Ads campaign."
+- "Pause the LinkedIn Ads campaigns with the lowest CTR this month."
+- "Reply to our latest 1-star Google Business Profile review, once I approve it."
+- "Set this Klaviyo flow live."
+- "Post this image to our Instagram account."
+
+Connectors with live write actions today: **Meta Ads** (Facebook & Instagram Ads — create/pause/enable campaigns, ad sets, and ads, set budgets, boost posts), **Google Ads** (create campaigns/ad groups/ads, pause/enable, budgets, bidding strategy, ad schedule, language targeting, keywords, Customer Match audiences), **TikTok Ads** (pause/enable, campaign and ad group budgets), **LinkedIn Ads** (pause/enable campaign groups/campaigns/creatives, budgets), **Microsoft Ads / Bing** (pause/enable, campaign budgets), **Instagram** (create image/video/carousel/story posts and comments), **Google Business Profile** (local posts, review replies, photos, hours and open status), **Klaviyo** (create flows, set flow status), **Salesforce** (update object fields), **Amazon DSP** (create/update campaigns), **Amazon Seller Central** (update listings), and **WordPress** (posts, pages, categories, tags). Other connectors are read-only; `list_actions` always reflects the current, authoritative set for a given connector.
 
 Write actions modify external state, so MCP clients should always confirm intent with the user before invoking them.
 
@@ -86,10 +93,24 @@ The server endpoint is `https://mcp.windsor.ai/`. Authentication is OAuth 2.0 �
 
 A handful of warehouse connectors (`mysql`, `postgresql`, `redshift`, `mongodb`, `snowflake`, `big_query`) require an explicit `date_filters` argument when filtering by date.
 
-**Write tools** — available on connectors that expose actions (e.g. ad platforms).
+**Write tools** — available on connectors that expose actions (e.g. ad platforms, Google Business Profile, Klaviyo, Salesforce, WordPress — see the [Write actions](#write-actions-not-just-reads) section above for the current list).
 
 - **`list_actions`** — Discover write actions available for a connector. Each action includes a JSON schema describing the params it accepts. Read-only connectors return an empty list. Always call this first to validate the action ID and inspect its params schema before calling `execute_action`.
 - **`execute_action`** — Run a write action (e.g. pause/enable a campaign, change a budget) against a connected account. Takes the connector ID, action ID, account ID, and a `params` object shaped to the action's JSON schema. Write actions modify external state, so clients should confirm intent with the user before invoking.
+
+**Connect & account tools** — manage connections and your Windsor.ai account without leaving the chat.
+
+- **`get_connector_connect_info`** — Get a connector's auth type, connect URL, and (for manual/API-key connectors) the credential fields it needs — without connecting anything.
+- **`get_windsor_login_url`** — Get an auto-login link to the user's Windsor.ai dashboard.
+- **`get_subscription_url`** — Get a Markdown link to the Windsor.ai pricing or plan-upgrade page. Returns a link only — it never initiates a purchase or changes the plan.
+- **`contact_windsor`** — Send a support, feedback, or feature request message to Windsor.ai and get a reference ID back.
+
+**Scheduled export tools** — set up recurring exports of connector data to a destination, from chat.
+
+- **`get_destinations`** — List destinations that can receive scheduled exports (e.g. BigQuery, Google Sheets, Snowflake, databases, storage) and any reusable credentials already set up.
+- **`get_destination_setup_info`** — Get the setup requirements for a new scheduled export: target fields, allowed schedules, reusable credentials, and a setup URL.
+- **`get_destination_tasks`** — List the user's existing scheduled export tasks, with destination, connector, schedule, and status.
+- **`create_destination_task`** — Create a recurring export of a connector's data to a destination on a schedule.
 
 For full parameter signatures, see [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt).
 
@@ -274,7 +295,7 @@ Yes — Windsor.ai has a free forever plan, and the MCP server is included at no
 Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), ChatGPT, Microsoft Copilot (via the Power Platform connector), Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, mcp-proxy, and custom MCP clients. See the [Supported AI clients](#-supported-ai-clients) table above.
 
 ### What can I ask Windsor MCP?
-Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it. On connectors that expose write actions (e.g. Meta Ads, Google Ads, TikTok Ads), you can also ask the assistant to act on what it finds — for example, "pause the campaigns that burned budget last week" or "cut this campaign's daily budget by 20%".
+Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it. On connectors that expose write actions (Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, Microsoft Ads/Bing, Instagram, Google Business Profile, Klaviyo, Salesforce, Amazon DSP, Amazon Seller Central, WordPress), you can also ask the assistant to act on what it finds — for example, "pause the campaigns that burned budget last week", "cut this campaign's daily budget by 20%", or "reply to our latest review, once I approve it".
 
 ### What data sources does Windsor MCP support?
 350+ connectors across advertising, analytics, CRM, e-commerce, payments, warehouses and more. The live, complete list is at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources). See the [Supported data sources](#-supported-data-sources) section for highlights by category.
