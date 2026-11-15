@@ -1,18 +1,18 @@
 # Windsor MCP — Connect Claude, ChatGPT and Cursor to 350+ marketing data sources
 
 <!-- Canonical: https://mcp.windsor.ai/docs -->
-<!-- Last updated: August 2026 -->
+<!-- Last updated: November 2026 -->
 
-Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 350+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On connectors that support it, agents can also execute **write actions** — for example creating and managing campaigns and budgets on Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, and Microsoft Ads (Bing); publishing Instagram posts; managing Google Business Profile listings and reviews; updating Klaviyo flows and Salesforce records; and more.
+Windsor MCP (Model Context Protocol) is a hosted MCP server that lets your AI assistant query, explore and analyze live business data from 350+ sources — Meta Ads, Google Ads, TikTok Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake and many more — with no SQL, no API keys, and no custom integrations. On 26 connectors, agents can also execute **write actions** — for example creating and managing campaigns, budgets and bidding on Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, Microsoft Ads (Bing), Pinterest, Snapchat and Amazon Ads; publishing posts on Instagram, Facebook Pages, LinkedIn Pages and Threads; managing Google Business Profile listings and reviews; updating products on Google Merchant Center, WooCommerce and TikTok Shop; and creating or updating Salesforce, GoHighLevel and Stripe records.
 
 It works with Claude, ChatGPT, Microsoft Copilot, Perplexity, Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, and any MCP-compatible client.
 
 > **TL;DR**
 > - Native connector in **Claude** (in the Claude directory) and **ChatGPT** (as a ChatGPT app).
-> - **Read and write**: query data from 350+ sources, and execute write actions (e.g. pause/enable ad campaigns) on connectors that expose them.
+> - **Read and write**: query data from 350+ sources, and execute 160+ write actions (e.g. pause/enable ad campaigns, change budgets, publish posts) on the 26 connectors that expose them. Actions that start or increase ad spend need an explicit confirmation step.
 > - **OAuth 2.0** — sign in once at Windsor.ai, no API keys to manage.
 > - **Free forever plan available** at Windsor.ai; some LLM providers (e.g. Claude) require a paid plan to use connectors.
-> - Live, machine-readable docs for AI agents at [`/llms.txt`](https://mcp.windsor.ai/llms.txt), [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt), and [`/datasources`](https://mcp.windsor.ai/datasources).
+> - Live, machine-readable docs for AI agents at [`/llms.txt`](https://mcp.windsor.ai/llms.txt), [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt), [`/datasources`](https://mcp.windsor.ai/datasources), and [`/actions`](https://mcp.windsor.ai/actions).
 
 ---
 
@@ -39,10 +39,24 @@ Ask your assistant to act on the insights it surfaces — for connectors that ex
 - "Reply to our latest 1-star Google Business Profile review, once I approve it."
 - "Set this Klaviyo flow live."
 - "Post this image to our Instagram account."
+- "Pause the Snapchat and Pinterest ad groups that didn't convert this week."
+- "Mark these WooCommerce orders as completed."
+- "Upload these three images and create a new Meta Ads image ad with them."
 
-Connectors with live write actions today: **Meta Ads** (Facebook & Instagram Ads — create/pause/enable campaigns, ad sets, and ads, set budgets, boost posts), **Google Ads** (create campaigns/ad groups/ads, pause/enable, budgets, bidding strategy, ad schedule, language targeting, keywords, Customer Match audiences), **TikTok Ads** (pause/enable, campaign and ad group budgets), **LinkedIn Ads** (pause/enable campaign groups/campaigns/creatives, budgets), **Microsoft Ads / Bing** (pause/enable, campaign budgets), **Instagram** (create image/video/carousel/story posts and comments), **Google Business Profile** (local posts, review replies, photos, hours and open status), **Klaviyo** (create flows, set flow status), **Salesforce** (update object fields), **Amazon DSP** (create/update campaigns), **Amazon Seller Central** (update listings), and **WordPress** (posts, pages, categories, tags). Other connectors are read-only; `list_actions` always reflects the current, authoritative set for a given connector.
+Connectors with live write actions today (26 connectors, 167 actions):
 
-Write actions modify external state, so MCP clients should always confirm intent with the user before invoking them.
+| Area | Connectors and what they can do |
+|---|---|
+| **Paid ads** | **Meta Ads** (create/update/pause/enable campaigns, ad sets and ads, duplicate ad sets, image and video ads, budgets, boost posts, page welcome messages) · **Google Ads** (campaigns, ad groups, responsive search ads and assets, budgets, bidding strategies and targets, geo/language targeting, ad schedule, keywords and negative keywords, Customer Match audiences) · **LinkedIn Ads** (campaign groups, campaigns, creatives, budgets, schedule, targeting) · **TikTok Ads**, **Pinterest Ads**, **Snapchat Ads** (pause/enable and budgets at every level) · **Microsoft Ads / Bing**, **Amazon Ads**, **OpenAI Ads** (pause/enable, campaign budgets) · **Amazon DSP** (create/update campaigns) |
+| **Organic social** | **Instagram** (image, video, carousel and story posts; create, reply to, hide/unhide and delete comments) · **Facebook Pages** (posts, photo posts) · **LinkedIn Pages** (posts, image posts) · **Threads** (text and image posts, replies) |
+| **Local & SEO** | **Google Business Profile** (local posts, review replies, photos, hours, open status, address, categories, service items and area, attributes) |
+| **E-commerce** | **Google Merchant Center** (insert/update/delete products, data sources) · **WooCommerce** (products, order status and notes, coupons) · **TikTok Shop** (products, prices, activate/deactivate) · **Amazon Seller Central** (update listings) |
+| **CRM, email & payments** | **Salesforce** (create/update/delete objects) · **GoHighLevel** (contacts, invoices) · **Klaviyo** (create flows, set flow status) · **Stripe** (create customers and subscriptions) |
+| **CMS** | **WordPress** (posts, pages, categories, tags) |
+
+Other connectors are read-only. `list_actions` always reflects the current, authoritative set for a given connector, and [`/actions`](https://mcp.windsor.ai/actions) lists every connector's write actions live.
+
+Write actions modify external state, so MCP clients should always confirm intent with the user before invoking them. On top of that, any action that starts or increases ad spend (enabling something, an active create, a budget, bid or target change) does not run on the first call: it returns a preview with a one-time `confirmation_token`, and only runs when called again with that token after the user approves. The token expires after 10 minutes and only fits the exact same user, connector, account, action and parameters.
 
 ### Out-of-the-box integration with 350+ sources
 Sync data from Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, GA4, HubSpot, Salesforce, Shopify, Stripe, BigQuery, Snowflake, QuickBooks, Xero, and 300+ more via native Windsor.ai connectors. Full live list at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources).
@@ -67,6 +81,7 @@ If you are an AI assistant or AI-search crawler, the canonical, machine-readable
 | [`/llms.txt`](https://mcp.windsor.ai/llms.txt) | llmstxt.org-format short summary of the server, tools, and clients. |
 | [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt) | Full reference: workflow, tool parameters, filter operators, troubleshooting, supported sources by category. |
 | [`/datasources`](https://mcp.windsor.ai/datasources) | Live JSON list of every supported connector. Authoritative; updated continuously. |
+| [`/actions`](https://mcp.windsor.ai/actions) | Live JSON list of every write action, grouped by connector. |
 | [`/docs`](https://mcp.windsor.ai/docs) | Human-readable HTML documentation with categorised connector tags. |
 | [`/.well-known/oauth-authorization-server`](https://mcp.windsor.ai/.well-known/oauth-authorization-server) | OAuth 2.0 discovery metadata for MCP clients. |
 
@@ -78,25 +93,31 @@ This GitHub repository is a discovery surface for developers; treat the endpoint
 
 You connect Windsor MCP to your AI assistant as a connector using the MCP protocol. The assistant then issues real-time data queries and receives structured results, all within the chat interface.
 
-The server endpoint is `https://mcp.windsor.ai/`. Authentication is OAuth 2.0 — the first time you connect, your client redirects you to Windsor.ai for a one-time login. No API key needed. Clients that only support API keys can pass a Windsor.ai key as `Authorization: Bearer <key>`.
+The server endpoint is `https://mcp.windsor.ai/` (Streamable HTTP; SSE is available at `https://mcp.windsor.ai/sse/`). Authentication is OAuth 2.0 — the first time you connect, your client redirects you to Windsor.ai for a one-time login. No API key needed. Clients that only support API keys can pass a Windsor.ai key as `Authorization: Bearer <key>`.
 
 ### Available tools
 
 **Read tools** — fetch data, never modify it.
 
-- **`get_current_user`** — Return the authenticated user's profile. Use this as a sanity check that auth is working.
-- **`get_connectors`** — List the user's connected connectors and their accounts. Pass `include_not_yet_connected=True` to also see all connectors the user can set up. Always call this first to discover available data sources.
+- **`get_current_user`** — Return the authenticated user's profile (username, email, and current Windsor.ai plan). Use this as a sanity check that auth is working.
+- **`get_connectors`** — List the user's connected connectors and their accounts, plus the write-action ids and read-option ids each connector exposes. Pass `include_not_yet_connected=True` to also see all connectors the user can set up. Always call this first to discover available data sources.
 - **`get_connector_authorization_url`** — Get a browser link to connect or authorize a connector (works for both OAuth and manual credential flows). Use when the user asks for data from a connector that isn't yet connected.
 - **`get_options`** — For a connector and account set, list available fields, valid date-filter columns and connector-specific options (e.g. attribution windows for Meta Ads).
 - **`get_fields`** — Get descriptions, types and tables for specific fields. Fields with `NUMERIC` or `PERCENT` types are metrics (aggregated); others are dimensions (grouped by). Always call before `get_data` to validate field IDs.
-- **`get_data`** — Run a query against a connector. Supports date ranges (`date_from`/`date_to` or presets like `last_30d`, `last_3m`, `this_year`), account filtering, connector-specific options, and nested filter conditions with operators `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `contains`, `ncontains`, `null`, `notnull`, `in`.
+- **`get_data`** — Run a query against a connector. Supports date ranges (`date_from`/`date_to` or presets like `last_30d`, `last_3m`, `this_year`; the last 3 days when no date is given), account filtering, connector-specific options, nested filter conditions with operators `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `contains`, `ncontains`, `null`, `notnull`, `in`, and `force_refresh` to re-fetch the most recent days (plans with hourly refresh). A pull that takes longer than the wait window returns `status: "pending"`; repeating the same call picks up the same job and returns its data once it is ready. Clients that support the MCP Tasks extension get a task instead.
 
-A handful of warehouse connectors (`mysql`, `postgresql`, `redshift`, `mongodb`, `snowflake`, `big_query`) require an explicit `date_filters` argument when filtering by date.
+A handful of warehouse connectors (`mysql`, `postgresql`, `redshift`, `mongodb`, `snowflake`, `big_query`) require an explicit `date_filters` argument (an object mapping table to date column, e.g. `{"orders": "created_at"}`) when filtering by date.
 
-**Write tools** — available on connectors that expose actions (e.g. ad platforms, Google Business Profile, Klaviyo, Salesforce, WordPress — see the [Write actions](#write-actions-not-just-reads) section above for the current list).
+**Custom field tools** — define calculated metrics and dimensions once and use them everywhere.
+
+- **`get_custom_fields`** — List the user's custom (formula) fields across connectors, each with its connector, field id, type and formula.
+- **`create_custom_field`** — Create a custom (formula) field on a connector, e.g. CPA or spend adjusted by a margin (`to_float(spend) * 1.2`). It then behaves like a normal field in `get_fields`, `get_data` and scheduled exports. Handy for recreating calculated fields when migrating from another platform.
+
+**Write tools** — available on the connectors that expose actions (see the [Write actions](#write-actions-not-just-reads) section above for the current list).
 
 - **`list_actions`** — Discover write actions available for a connector. Each action includes a JSON schema describing the params it accepts. Read-only connectors return an empty list. Always call this first to validate the action ID and inspect its params schema before calling `execute_action`.
-- **`execute_action`** — Run a write action (e.g. pause/enable a campaign, change a budget) against a connected account. Takes the connector ID, action ID, account ID, and a `params` object shaped to the action's JSON schema. Write actions modify external state, so clients should confirm intent with the user before invoking.
+- **`execute_action`** — Run a write action (e.g. pause/enable a campaign, change a budget) against a connected account. Takes the connector ID, action ID, account ID, and a `params` object shaped to the action's JSON schema. For actions that start or increase ad spend, the first call returns a preview with a `confirmation_token`; call again with the same arguments plus that token once the user approves (clients whose cached tool list lacks the argument can pass it inside `params`). Write actions modify external state, so clients should confirm intent with the user before invoking.
+- **`upload_files`** — For actions that take files (e.g. Meta Ads `create_ad_image`), open an upload widget in the chat so the user can pick local files. Files go straight from the browser to Windsor.ai without passing through the assistant; the result (e.g. one `image_hash` per image) can then be used in `execute_action`. Clients that can't render the widget get a `curl` command instead. The upload link is valid for ten minutes and one upload.
 
 **Connect & account tools** — manage connections and your Windsor.ai account without leaving the chat.
 
@@ -113,6 +134,28 @@ A handful of warehouse connectors (`mysql`, `postgresql`, `redshift`, `mongodb`,
 - **`create_destination_task`** — Create a recurring export of a connector's data to a destination on a schedule.
 
 For full parameter signatures, see [`/llms-full.txt`](https://mcp.windsor.ai/llms-full.txt).
+
+### Example prompts
+
+The root server also ships MCP prompts that clients can show as one-click starters: **list connected sources**, **add a data source**, and **list running campaigns** across ad platforms.
+
+### Scoped endpoints
+
+Besides the main endpoint, the same server is available on narrower URLs. The tools are the same, but only the listed connectors are in scope, which keeps the assistant focused and the connector list short:
+
+- **Per connector** — `https://mcp.windsor.ai/<connector>/`, e.g. `https://mcp.windsor.ai/facebook/` for Meta Ads or `https://mcp.windsor.ai/google_ads/` for Google Ads. Any connector slug from [`/datasources`](https://mcp.windsor.ai/datasources) works.
+- **Per use case** — curated bundles of related connectors:
+
+| Endpoint | Connectors |
+|---|---|
+| `/paid_media/` | Meta Ads, Google Ads, TikTok Ads, Microsoft Ads (Bing), LinkedIn Ads, Amazon Ads |
+| `/search_ads/` | Google Ads, Microsoft Ads (Bing), Yahoo! JAPAN Ads |
+| `/social_ads/` | Meta Ads, LinkedIn Ads, TikTok Ads, Pinterest Ads, Snapchat Ads |
+| `/social_media/` | Instagram, Facebook Pages, TikTok Organic, YouTube, LinkedIn Pages, Google Business Profile |
+| `/crm/` | HubSpot, Salesforce, Pipedrive, GoHighLevel, Zoho CRM, ActiveCampaign |
+| `/ecommerce/` | Shopify, Amazon Seller Central, WooCommerce, BigCommerce, Klaviyo, Google Merchant Center |
+| `/finance/` | Stripe, QuickBooks, PayPal, Xero, Chargebee, Braintree |
+| `/web_analytics/` | Google Analytics 4, Search Console, Adobe Analytics, Amplitude, Mixpanel, Matomo |
 
 ---
 
@@ -295,7 +338,7 @@ Yes — Windsor.ai has a free forever plan, and the MCP server is included at no
 Any AI agent compatible with MCP — including Claude (Desktop, Web, Code), ChatGPT, Microsoft Copilot (via the Power Platform connector), Cursor, Windsurf, Cline, GitHub Copilot, Gemini, Manus, n8n, mcp-proxy, and custom MCP clients. See the [Supported AI clients](#-supported-ai-clients) table above.
 
 ### What can I ask Windsor MCP?
-Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it. On connectors that expose write actions (Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, Microsoft Ads/Bing, Instagram, Google Business Profile, Klaviyo, Salesforce, Amazon DSP, Amazon Seller Central, WordPress), you can also ask the assistant to act on what it finds — for example, "pause the campaigns that burned budget last week", "cut this campaign's daily budget by 20%", or "reply to our latest review, once I approve it".
+Marketing performance, sales pipelines, CRM data, e-commerce orders, payment activity, finance metrics, ad spend summaries, ROAS trends, campaign anomalies, multi-channel attribution, warehouse queries, and more. If it's in your Windsor.ai data, you can ask it. On the 26 connectors that expose write actions (including Meta Ads, Google Ads, TikTok Ads, LinkedIn Ads, Microsoft Ads/Bing, Pinterest, Snapchat, Amazon Ads, Instagram, Facebook Pages, Google Business Profile, Google Merchant Center, WooCommerce, TikTok Shop, Salesforce, Klaviyo, Stripe and WordPress — full list at [`/actions`](https://mcp.windsor.ai/actions)), you can also ask the assistant to act on what it finds — for example, "pause the campaigns that burned budget last week", "cut this campaign's daily budget by 20%", or "reply to our latest review, once I approve it".
 
 ### What data sources does Windsor MCP support?
 350+ connectors across advertising, analytics, CRM, e-commerce, payments, warehouses and more. The live, complete list is at [mcp.windsor.ai/datasources](https://mcp.windsor.ai/datasources). See the [Supported data sources](#-supported-data-sources) section for highlights by category.
@@ -307,7 +350,7 @@ No. Just ask your questions in plain English and get structured responses in rea
 OAuth 2.0 is the default — your client redirects you to Windsor.ai for a one-time login. The server implements MCP OAuth with Dynamic Client Registration; clients that support MCP OAuth (Claude, ChatGPT, Cursor, Manus) discover the endpoints automatically. For setups that only support API keys, pass your Windsor.ai key as a Bearer token via the `Authorization` header.
 
 ### Is my data secure with Windsor MCP?
-Yes. Windsor MCP exposes both read tools (which only fetch data) and a small number of write tools (`list_actions`, `execute_action`) on connectors that opt into actions — for example, pausing or enabling an ad campaign. Write actions are explicitly flagged as destructive to MCP clients, which prompt you to confirm intent before invoking them; nothing is changed in your sources without your approval. Authentication is OAuth 2.0; the MCP server does not store your Windsor.ai password and does not retain query results. Data flows over TLS. Windsor.ai is SOC 2 compliant. For details, see [windsor.ai/security](https://windsor.ai/security).
+Yes. Windsor MCP exposes both read tools (which only fetch data) and a small number of write tools (`list_actions`, `execute_action`, `upload_files`) on connectors that opt into actions — for example, pausing or enabling an ad campaign. Write actions are explicitly flagged as destructive to MCP clients, which prompt you to confirm intent before invoking them; nothing is changed in your sources without your approval. Actions that start or increase ad spend additionally require a one-time confirmation token from a preview before they run. Files you upload go directly from your browser to Windsor.ai, never through the AI assistant. Authentication is OAuth 2.0; the MCP server does not store your Windsor.ai password and does not retain query results. Data flows over TLS. Windsor.ai is SOC 2 compliant. For details, see [windsor.ai/security](https://windsor.ai/security).
 
 ### How is Windsor MCP different from other data integration tools?
 Windsor MCP is a native MCP server, not a plugin or wrapper — it works in any MCP-compatible client without proxies. Windsor.ai includes warehouse and database destinations (BigQuery, Snowflake, Redshift, S3, MySQL, Postgres) on its lower-priced tiers, and the MCP server is included on all paid plans at no extra cost. See [windsor.ai/pricing](https://windsor.ai/pricing) for a feature-by-feature comparison.
