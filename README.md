@@ -50,7 +50,8 @@ Connectors with live write actions today:
 - **Google Ads**: campaigns, ad groups, responsive search ads and assets; budgets; bidding strategies and targets; geo and language targeting; ad schedule; keywords and negative keywords; Customer Match audiences.
 - **LinkedIn Ads**: campaign groups, campaigns and creatives; budgets; schedule; targeting.
 - **TikTok Ads**, **Pinterest Ads**, **Snapchat Ads**: pause/enable campaigns, ad groups (ad squads on Snapchat) and ads; campaign and ad group budgets.
-- **Microsoft Ads (Bing)**, **Amazon Ads**, **OpenAI Ads**: pause/enable; campaign budgets.
+- **Microsoft Ads (Bing)**, **OpenAI Ads**: pause/enable campaigns and ad groups; campaign budgets.
+- **Amazon Ads**: pause/enable campaigns; campaign budgets.
 - **Amazon DSP**: create/update campaigns.
 
 **Organic social**
@@ -127,7 +128,7 @@ The server endpoint is `https://mcp.windsor.ai/` (Streamable HTTP; SSE is availa
 - **`get_connector_authorization_url`**: Get a browser link to connect or authorize a connector (works for both OAuth and manual credential flows). Use when the user asks for data from a connector that isn't yet connected.
 - **`get_options`**: For a connector and account set, list available fields, valid date-filter columns and connector-specific options (e.g. attribution windows for Meta Ads).
 - **`get_fields`**: Get descriptions, types and tables for specific fields. Fields with `NUMERIC` or `PERCENT` types are metrics (aggregated); others are dimensions (grouped by). Always call before `get_data` to validate field IDs.
-- **`get_data`**: Run a query against a connector. Supports date ranges (`date_from`/`date_to` or presets like `last_30d`, `last_3m`, `this_year`; the last 3 days when no date is given), account filtering, connector-specific options, nested filter conditions with operators `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `contains`, `ncontains`, `null`, `notnull`, `in`, and `force_refresh` to re-fetch the most recent days (plans with hourly refresh). A pull that takes longer than the wait window returns `status: "pending"`; repeating the same call picks up the same job and returns its data once it is ready. Clients that support the MCP Tasks extension get a task instead.
+- **`get_data`**: Run a query against a connector. Supports date ranges (`date_from`/`date_to` or presets like `last_30d`, `last_3m`, `this_year`; the last 3 days when no date is given), account filtering, connector-specific options, nested filter conditions with operators `eq`, `neq`, `gt`, `gte`, `lt`, `lte`, `contains`, `ncontains`, `null`, `notnull`, `in`, and `force_refresh` to re-fetch the most recent days (plans with hourly refresh). A pull that takes longer than the wait window returns `status: "pending"`; repeating the same call picks up the same job and returns its data once it is ready. Clients that support the MCP Tasks extension get a task instead. Each user can run only a limited number of these long pulls at once; over the limit, the call returns `status: "pending"` with `job_status: "queued"`, and repeating it starts the pull once another one has finished.
 
 A handful of warehouse connectors (`mysql`, `postgresql`, `redshift`, `mongodb`, `snowflake`, `big_query`) require an explicit `date_filters` argument (an object mapping table to date column, e.g. `{"orders": "created_at"}`) when filtering by date.
 
@@ -162,6 +163,12 @@ For full parameter signatures, see [`/llms-full.txt`](https://mcp.windsor.ai/llm
 
 The root server also ships MCP prompts that clients can show as one-click starters: **list connected sources**, **add a data source**, and **list running campaigns** across ad platforms.
 
+The `/paid_media/` endpoint (see [Scoped endpoints](#scoped-endpoints)) ships its own prompts instead:
+- **Cross-platform ads report**: spend, clicks, conversions, cost per conversion and ROAS per ad platform for the last 30 days, plus the 5 campaigns with the highest spend.
+- **Wasted spend audit**: campaigns, ad sets and Google Ads search terms that spent in the last 30 days with no conversions, with suggested pauses and negative keywords. Nothing changes until you confirm.
+- **Build a Google Ads Search campaign**: plans keywords, ad groups, responsive search ads and sitelinks, then creates the campaign paused after you confirm.
+- **Launch a Meta Ads campaign**: plans goal, budget, audience and landing page, then creates the campaign paused after you confirm.
+
 ### Scoped endpoints
 
 Besides the main endpoint, the same server is available on narrower URLs. The tools are the same, but only the listed connectors are in scope, which keeps the assistant focused and the connector list short:
@@ -171,14 +178,15 @@ Besides the main endpoint, the same server is available on narrower URLs. The to
 
 | Endpoint | Connectors |
 |---|---|
-| `/paid_media/` | Meta Ads, Google Ads, TikTok Ads, Microsoft Ads (Bing), LinkedIn Ads, Amazon Ads |
+| `/paid_media/` | Meta Ads, Google Ads, TikTok Ads, Microsoft Ads (Bing), LinkedIn Ads, Amazon Ads, OpenAI Ads |
 | `/search_ads/` | Google Ads, Microsoft Ads (Bing), Yahoo! JAPAN Ads |
 | `/social_ads/` | Meta Ads, LinkedIn Ads, TikTok Ads, Pinterest Ads, Snapchat Ads |
-| `/social_media/` | Instagram, Facebook Pages, TikTok Organic, YouTube, LinkedIn Pages, Google Business Profile |
+| `/social_media/` | Instagram, Facebook Pages, TikTok Organic, YouTube, LinkedIn Pages, Google Business Profile, Threads |
 | `/crm/` | HubSpot, Salesforce, Pipedrive, GoHighLevel, Zoho CRM, ActiveCampaign |
 | `/ecommerce/` | Shopify, Amazon Seller Central, WooCommerce, BigCommerce, Klaviyo, Google Merchant Center |
 | `/finance/` | Stripe, QuickBooks, PayPal, Xero, Chargebee, Braintree |
 | `/web_analytics/` | Google Analytics 4, Search Console, Adobe Analytics, Amplitude, Mixpanel, Matomo |
+| `/seo/` | Search Console, Google Analytics 4, Bing Webmaster Tools, PageSpeed Insights, Google Business Profile, Ahrefs, Semrush, SE Ranking, Serpstat |
 
 ---
 
